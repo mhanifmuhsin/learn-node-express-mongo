@@ -52,7 +52,7 @@ routers.get('/siswa/:id', async (req, res) => {
 })
 
 //tambah data siswa
-routers.post('/siswa',multer().none(), async (req, res) => {
+routers.post('/siswa', multer().none(), async (req, res) => {
     if (client.isConnected) {
         const { nama, kelas } = req.body;
         const db = client.db("sekolah");
@@ -82,4 +82,37 @@ routers.post('/siswa',multer().none(), async (req, res) => {
     }
 })
 
+//update data siswa
+routers.put('/siswa/:id', async (req, res) => {
+    if (client.isConnected()) {
+        const { nama, kelas } = req.body;
+        const db = client.db('sekolah');
+        const result = await db.collection('siswa').updateOne(
+            {
+                _id: ObjectId(req.params.id)
+            },{
+                $set : {
+                    nama:nama,
+                    kelas:kelas
+                }
+            })
+            if(result.matchedCount==1){
+                res.send({
+                    status:'success',
+                    message:'update data siswa berhasil'
+                })
+            }else{
+                res.send({
+                    status:'warning',
+                    message:'update data siswa gagal'
+                })
+            }
+    } else {
+        res.send({
+            status:'error',
+            message:'koneksi gagal'
+        })
+
+    }
+})
 module.exports = routers
