@@ -90,29 +90,57 @@ routers.put('/siswa/:id', async (req, res) => {
         const result = await db.collection('siswa').updateOne(
             {
                 _id: ObjectId(req.params.id)
-            },{
-                $set : {
-                    nama:nama,
-                    kelas:kelas
-                }
-            })
-            if(result.matchedCount==1){
-                res.send({
-                    status:'success',
-                    message:'update data siswa berhasil'
-                })
-            }else{
-                res.send({
-                    status:'warning',
-                    message:'update data siswa gagal'
-                })
+            }, {
+            $set: {
+                nama: nama,
+                kelas: kelas
             }
+        })
+        if (result.matchedCount == 1) {
+            res.send({
+                status: 'success',
+                message: 'update data siswa berhasil'
+            })
+        } else {
+            res.send({
+                status: 'warning',
+                message: 'update data siswa gagal'
+            })
+        }
     } else {
         res.send({
-            status:'error',
-            message:'koneksi gagal'
+            status: 'error',
+            message: 'koneksi gagal'
         })
 
     }
 })
+
+//hapus data siswa
+routers.delete('/siswa/:id', async (req, res) => {
+    if (client.isConnected) {
+        const db = client.db('sekolah');
+        const result = await db.collection('siswa').deleteOne({
+            _id: ObjectId(req.params.id)
+        })
+
+        if (result.deletedCount == 1) {
+            res.send({
+                status: 'success',
+                message: 'data siswa berhasil dihapus'
+            })
+        } else {
+            res.send({
+                status: 'warning',
+                message: 'data siswa gagal dihapus'
+            })
+        }
+    } else {
+        res.send({
+            status: 'error',
+            message: 'koneksi database gagal'
+        })
+    }
+})
+
 module.exports = routers
