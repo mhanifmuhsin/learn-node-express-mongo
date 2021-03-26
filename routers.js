@@ -34,9 +34,11 @@ routers.get('/siswa', async (req, res) => {
 routers.get('/siswa/:id', async (req, res) => {
     if (client.isConnected()) {
         const db = client.db('sekolah')
+        const id = req.params.id;
+        const _id = (ObjectId.isValid(id))?ObjectId(id):id
         // kode untuk menampilkan list siswa res.send('menampilkan list siswa')
         const siswa = await db.collection('siswa').findOne({
-            _id: ObjectId(req.params.id)
+            _id: _id
         })
         res.send({
             status: 'success',
