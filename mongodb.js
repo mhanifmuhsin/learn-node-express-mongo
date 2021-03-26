@@ -1,3 +1,5 @@
+// DEPCREATED
+
 const MongoClient = require("mongodb").MongoClient;
 const connectionString = "mongodb://localhost:27017";
 
